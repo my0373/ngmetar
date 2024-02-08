@@ -1,0 +1,5 @@
+.idea/
+.jfrog/
+build/
+dist/
+metarng.egg-info
