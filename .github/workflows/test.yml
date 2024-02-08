@@ -1,4 +1,4 @@
-name: "JFrog Integration Example"
+name: "Publish Build to Artifactory"
 on:
   workflow_dispatch:
 
@@ -22,11 +22,17 @@ jobs:
        - name: Install Deps
          run: jf pip install .
 
+       - name: Scan the source code
+         run: jf audit --project ${{ vars.JF_PROJECT }}
+
        - name: Package the project
          run: python setup.py sdist bdist_wheel
 
+       - name: Scan the binaries
+         run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
+
        - name: Publish
-         run: jf rt upload dist/ metar-pypi-dev-brs-pypi/
+         run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/
 
        - name: Publish Build info With JFrog CLI
          run: |
