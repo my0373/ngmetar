@@ -15,6 +15,7 @@ jobs:
          env:
            JF_URL: ${{ secrets.JF_URL }}
            JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+           JFROG_CLI_BUILD_NAME: ${{ vars.BUILD_NAME }}
 
        - name: Set CLI Config
          run: jf pip-config --global=true --repo-resolve=${{ vars.JF_PYPI_REPO }}
