@@ -39,6 +39,8 @@ jobs:
          run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/
 
        - name: Publish Build info With JFrog CLI
+         env:
+           JFROG_CLI_BUILD_NAME: ${{ vars.BUILD_NAME }}
          run: |
           # Collect environment variables for the build
           jf rt build-collect-env
