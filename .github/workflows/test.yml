@@ -51,3 +51,6 @@ jobs:
           # Publish build info
           jf rt build-publish --detailed-summary --project ${{ vars.JF_PROJECT }}
 
+       - name: Install Dep
+         run: jf pip install ngmetar
+
