@@ -51,6 +51,9 @@ jobs:
           # Publish build info
           jf rt build-publish --detailed-summary --project ${{ vars.JF_PROJECT }}
 
-       - name: Install Dep
+       - name: Uninstall metarng package
+         run: jf pip uninstall metarng
+         
+       - name: Install metarng package
          run: jf pip install metarng
 
