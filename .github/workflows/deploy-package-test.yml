@@ -1,0 +1,32 @@
+name: "Test install of metarng"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+     runs-on: ubuntu-latest
+
+     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+       - name: Setup JFrog CLI
+         uses: jfrog/setup-jfrog-cli@v3
+         env:
+           JF_URL: ${{ secrets.JF_URL }}
+           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+           JFROG_CLI_BUILD_NAME: ${{ vars.BUILD_NAME }}
+           JFROG_CLI_BUILD_NUMBER: ${{ vars.BUILD_NUMBER }}
+
+       - name: Set CLI Config
+         run: jf pip-config --global=true --repo-resolve=${{ vars.JF_PYPI_REPO }}
+
+       - name: Install Deps
+         run: jf pip install .
+
+       - name: Install pipenv
+         run: jf pip install pipenv
+         
+       - name: Install metarng package
+         run: jf pip install metarng
+
