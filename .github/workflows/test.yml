@@ -49,5 +49,5 @@ jobs:
           # Collect VCS details from git and add them to the build
           jf rt build-add-git
           # Publish build info
-          jf rt build-publish --project ${{ vars.JF_PROJECT }}
+          jf rt build-publish --detailed-summary --project ${{ vars.JF_PROJECT }}
 
