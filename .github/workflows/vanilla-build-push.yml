@@ -38,10 +38,10 @@ jobs:
          run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
   
        - name: Upload the packages to the pypi repository in Artifactory
-         run: jf rt bce ${{ vars.BUILD_NAME }} 1
+         run: jf rt bce --project ${{ vars.JF_PROJECT }}${{ vars.BUILD_NAME }} 1
          
        - name: Publish the packages to the pypi repository in Artifactory
-         run: jf rt bp ${{ vars.BUILD_NAME }} 1
+         run: jf rt bp --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} 1 
 
        - name: Upload the packages to the pypi repository in Artifactory
          run: jf pip install metarng
