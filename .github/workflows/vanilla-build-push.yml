@@ -22,14 +22,17 @@ jobs:
        - name: Configure Artifactory in non interactive mode authentication with an access key.
          run: jf c add --interactive=false --url=${{ secrets.JF_URL }} --access-token=${{ secrets.JF_ACCESS_TOKEN }}
 
-       # - name: Install metarng package
-       #   run: jf pip-config --repo-resolve=${{ vars.JF_PYPI_REPO }}
-
-       - name: Install dependancies for the metarng package
+       - name: Install dependencies for the metarng package
          run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
-         
+
+       - name: Scan the source code before building
+         run: jf audit --project ${{ vars.JF_PROJECT }}
+       
        - name: Package the project, create distribution archives (tar.gz and whl)
          run: python setup.py sdist bdist_wheel
+         
+       - name: Scan the newly built binaries
+         run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
 
        - name: Upload the packages to the pypi repository in Artifactory
          run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
