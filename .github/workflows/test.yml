@@ -22,10 +22,11 @@ jobs:
          run: jf pip-config --global=true --repo-resolve=${{ vars.JF_PYPI_REPO }}
 
        - name: Install Deps
-         run: jf pip install .
+         # run: jf pip install .
+         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
 
        - name: Install pipenv
-         run: jf pip install pipenv
+         run: jf pip install pipenv --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
 
        - name: Scan the source code
          run: jf audit --project ${{ vars.JF_PROJECT }}
@@ -37,7 +38,7 @@ jobs:
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
 
        - name: Publish
-         run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/
+         run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/ --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
 
        - name: Publish Build info With JFrog CLI
          env:
