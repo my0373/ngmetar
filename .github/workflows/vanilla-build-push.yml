@@ -41,8 +41,8 @@ jobs:
          run: jf rt bp ${{ vars.BUILD_NAME }} 1
 
        - name: Upload the packages to the pypi repository in Artifactory
-         run: jf pip install ${{ vars.BUILD_NAME }}
+         run: jf pip install metarng
 
        - name: Upload the packages to the pypi repository in Artifactory
-         run: pip show ${{ vars.BUILD_NAME }}
+         run: pip show metarng
   
