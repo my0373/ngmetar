@@ -1,4 +1,4 @@
-name: "Debug run of JFrog Python Build"
+name: "Build and Publish metarng package"
 on:
   workflow_dispatch:
 
