@@ -1,0 +1,48 @@
+name: "Test install of metarng"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v3
+
+       - name: Setup JFrog CLI
+         uses: jfrog/setup-jfrog-cli@v3
+         env:
+           JF_URL: ${{ secrets.JF_URL }}
+           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+       - name: Configure Artifactory repo
+         run: jf pip-config --repo-resolve=${{ vars.JF_PYPI_REPO }}
+
+       - name: Configure Artifactory in non interactive mode authentication with an access key.
+         run: jf c add --interactive=false --url=${{ secrets.JF_URL }} --access-token=${{ secrets.JF_ACCESS_TOKEN }}
+
+       # - name: Install metarng package
+       #   run: jf pip-config --repo-resolve=${{ vars.JF_PYPI_REPO }}
+
+       - name: Install dependancies for the metarng package
+         run: jf pip install . --build-name=my-pip-build --build-number=1 --module=jfrog-python-example
+         
+       - name: Package the project, create distribution archives (tar.gz and whl)
+         run: python setup.py sdist bdist_wheel
+
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: jf rt u dist/ pypi/ --build-name=my-pip-build --build-number=1 --module=jfrog-python-example
+  
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: jf rt bce my-pip-build 1
+         
+       - name: Publish the packages to the pypi repository in Artifactory
+         run: jf rt bp my-pip-build 1
+
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: jf pip install jfrog-python-example
+
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: pip show jfrog-python-example
+  
