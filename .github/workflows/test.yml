@@ -1,6 +1,5 @@
 name: "Publish Build to Artifactory"
-on:
-  workflow_dispatch:
+on: [push, fork, workflow_dispatch]
 
 jobs:
   build:
