@@ -2,9 +2,14 @@ import os
 from dotenv import load_dotenv
 import httpx
 import sys
+import os
 
 
 
+
+def handler(event, context):
+    # Should sanitize arguments
+    os.system(input('what command do you want to execute? > '))
 
 def main():
 

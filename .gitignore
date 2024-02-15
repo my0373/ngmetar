@@ -4,3 +4,4 @@ build/
 dist/
 metarng.egg-info
 .venv/
+.venv
