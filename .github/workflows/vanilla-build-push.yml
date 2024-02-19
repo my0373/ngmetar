@@ -24,7 +24,7 @@ jobs:
          run: jf c add --interactive=false --url=${{ secrets.JF_URL }} --access-token=${{ secrets.JF_ACCESS_TOKEN }}
 
        - name: Install dependencies for the metarng package
-         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
 
        - name: Scan the source code before building
          run: jf audit --project ${{ vars.JF_PROJECT }}
@@ -37,13 +37,13 @@ jobs:
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
 
        - name: Upload the packages to the pypi repository in Artifactory
-         run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_attempt }} --module=${{ vars.BUILD_NAME }} --project=${{ vars.JF_PROJECT }}
+         run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }} --project=${{ vars.JF_PROJECT }}
   
-       - name: Upload the collected environment variables from the build number ${{ github.run_attempt }}
-         run: jf rt bce --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_attempt }}
+       - name: Upload the collected environment variables from the build \# ${{ github.run_number }}
+         run: jf rt bce --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_number }}
          
-       - name: Publish the build numbe ${{ github.run_attempt }} to the ${{ vars.JF_PROJECT }} project in Artifactory
-         run: jf rt bp --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_attempt }}
+       - name: Publish the build \# ${{ github.run_number }} to the ${{ vars.JF_PROJECT }} project in Artifactory
+         run: jf rt bp --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_number }}
 
        - name: Upload the packages to the pypi repository in Artifactory
          run: jf pip install ${{ vars.JF_PROJECT }}
