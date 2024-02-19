@@ -1,6 +1,6 @@
 name: "Publish Build to Artifactory"
-on: [push, fork, workflow_dispatch]
-
+# on: [push, fork, workflow_dispatch]
+# on: [workflow_dispatch,]
 jobs:
   build:
      runs-on: ubuntu-latest
