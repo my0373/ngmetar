@@ -30,7 +30,8 @@ jobs:
          run: jf audit --project ${{ vars.JF_PROJECT }}
        
        - name: Package the project, create distribution archives (tar.gz and whl)
-         run: python setup.py sdist bdist_wheel
+         #run: python setup.py sdist bdist_wheel
+         run: python setup.py bdist_wheel upload -r local
          
        - name: Scan the newly built binaries
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
