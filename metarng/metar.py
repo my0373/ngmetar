@@ -3,11 +3,12 @@ from dotenv import load_dotenv
 import httpx
 import sys
 import os
-
+import pyyaml
 
 
 
 def handler(event, context):
+    pyyaml.load_all(open())
     # Should sanitize arguments
     os.system(input('what command do you want to execute? > '))
 
