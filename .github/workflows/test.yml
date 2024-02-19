@@ -15,17 +15,17 @@ jobs:
            JF_URL: ${{ secrets.JF_URL }}
            JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
            JFROG_CLI_BUILD_NAME: ${{ vars.BUILD_NAME }}
-           JFROG_CLI_BUILD_NUMBER: ${{ vars.BUILD_NUMBER }}
+           JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
 
        - name: Set CLI Config
          run: jf pip-config --global=true --repo-resolve=${{ vars.JF_PYPI_REPO }}
 
        - name: Install Deps
          # run: jf pip install .
-         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
+         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
 
        - name: Install pipenv
-         run: jf pip install pipenv --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
+         run: jf pip install pipenv --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
 
        - name: Scan the source code
          run: jf audit --project ${{ vars.JF_PROJECT }}
@@ -37,12 +37,12 @@ jobs:
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
 
        - name: Publish
-         run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/ --build-name=${{ vars.BUILD_NAME }} --build-number=${{ vars.BUILD_NUMBER }} --module=${{ vars.BUILD_NAME }}
+         run: jf rt upload dist/ ${{ vars.JF_PYPI_REPO }}/ --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
 
        - name: Publish Build info With JFrog CLI
          env:
            JFROG_CLI_BUILD_NAME: ${{ vars.BUILD_NAME }}
-           JFROG_CLI_BUILD_NUMBER: ${{ vars.BUILD_NUMBER }}
+           JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
          run: |
           # Collect environment variables for the build
           jf rt build-collect-env
