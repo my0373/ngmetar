@@ -24,3 +24,4 @@ $ restorecon -R -v $HOME
 ```shell
 docker run -it -e METAR_ICAO="EGGD" -e METAR_API_KEY="[INSERT METAR KEY HERE]" -e METAR_SERVICE_URI="https://api.checkwx.com/metar/EGGD/decoded" [IMAGE_NAME_HERE]
 ```
+.
