@@ -31,7 +31,7 @@ jobs:
        
        - name: Package the project, create distribution archives (tar.gz and whl)
          #run: python setup.py sdist bdist_wheel
-         run: python setup.py bdist_wheel upload -r local
+         run: python setup.py bdist_wheel
          
        - name: Scan the newly built binaries
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
@@ -40,10 +40,10 @@ jobs:
          run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }} --project=${{ vars.JF_PROJECT }}
   
        - name: Upload the collected environment variables from the build
-         run: jf rt bce --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} 1
+         run: jf rt bce --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_attempt }}
          
        - name: Publish the build to the ${{ vars.JF_PROJECT }} project in Artifactory
-         run: jf rt bp --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} 1 
+         run: jf rt bp --project ${{ vars.JF_PROJECT }} ${{ vars.BUILD_NAME }} ${{ github.run_attempt }}
 
        - name: Upload the packages to the pypi repository in Artifactory
          run: jf pip install ${{ vars.JF_PROJECT }}
