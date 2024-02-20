@@ -45,6 +45,9 @@ jobs:
        - name: Publish the build \# ${{ github.run_number }} to the ${{ vars.JF_PROJECT }} project in Artifactory
          run: jf rt bp ${{ vars.BUILD_NAME }} 1
 
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: jf pip install ${{ vars.JF_PROJECT }}
+
        - name: Show the build
          run: pip show ${{ vars.JF_PROJECT }}
 
