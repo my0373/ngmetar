@@ -1,0 +1,78 @@
+name: "Build and Publish metarng package"
+on: [push, workflow_dispatch]
+#on:
+  #workflow_dispatch:
+
+jobs:
+  build:
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v3
+
+       - name: Setup JFrog CLI
+         uses: jfrog/setup-jfrog-cli@v3
+         env:
+           JF_URL: ${{ secrets.JF_URL }}
+           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+       - name: Configure Artifactory repo
+         run: jf pip-config --repo-resolve=${{ vars.JF_PYPI_REPO }}
+
+       - name: Configure Artifactory in non interactive mode authentication with an access key.
+         run: jf c add --interactive=false --url=${{ secrets.JF_URL }} --access-token=${{ secrets.JF_ACCESS_TOKEN }}
+
+       - name: Install dependencies for the metarng package
+         run: jf pip install -r requirements.txt --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+
+       - name: Scan the source code before building
+         run: jf audit --project ${{ vars.JF_PROJECT }}
+       
+       - name: Package the project, create distribution archives (tar.gz and whl)
+         #run: python setup.py sdist bdist_wheel
+         run: python setup.py sdist bdist_wheel
+         
+       - name: Scan the newly built binaries
+         run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
+
+       - name: Upload the packages to the pypi repository in Artifactory
+         run: jf rt u dist/ pypi/ --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+  
+       - name: Upload the collected environment variables from the build \# ${{ github.run_number }}
+         run: jf rt bce ${{ vars.BUILD_NAME }} 1
+         
+       - name: Publish the build \# ${{ github.run_number }} to the ${{ vars.JF_PROJECT }} project in Artifactory
+         run: jf rt bp ${{ vars.BUILD_NAME }} 1
+
+       - name: Show the build
+         run: pip show j${{ vars.BUILD_NAME }}  
+
+
+#          ##########
+
+#          Configure Artifactory:
+
+
+
+
+# # Using requirements.txt:
+# jf pip install -r requirements.txt --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+
+# # Package the project, create distribution archives (tar.gz and whl):
+# python setup.py sdist bdist_wheel
+
+# Upload the packages to the pypi repository in Artifactory:
+# jf rt u dist/ pypi/ --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+
+# Collect environment variables and add them to the build info:
+# jf rt bce ${{ vars.BUILD_NAME }} 1
+
+# Publish the build info to Artifactory:
+# jf rt bp ${{ vars.BUILD_NAME }} 1
+
+# Install published package by installing it from Artifactory using pip:
+# jf pip install ${{ vars.BUILD_NAME }}
+
+# Validate package successfully installed:
+# pip show j${{ vars.BUILD_NAME }}  
