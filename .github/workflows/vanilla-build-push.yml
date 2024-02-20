@@ -24,7 +24,7 @@ jobs:
          run: jf c add --interactive=false --url=${{ secrets.JF_URL }} --access-token=${{ secrets.JF_ACCESS_TOKEN }}
 
        - name: Install dependencies for the metarng package
-         run: jf pip install . --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
+         run: jf pip install -r requirements.txt --build-name=${{ vars.BUILD_NAME }} --build-number=${{ github.run_number }} --module=${{ vars.BUILD_NAME }}
 
        - name: Scan the source code before building
          run: jf audit --project ${{ vars.JF_PROJECT }}
