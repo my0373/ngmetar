@@ -4,8 +4,14 @@ import httpx
 import sys
 import os
 import pyyaml
+import tensorflow as tf
 
 
+from tensorflow.keras.layers import Dense, Flatten, Conv2D
+from tensorflow.keras import Model
+
+def tensorflow():
+    print("TensorFlow version:", tf.__version__)
 
 def handler(event, context):
     pyyaml.load_all(open())
