@@ -46,7 +46,7 @@ jobs:
          run: jf rt bp ${{ vars.BUILD_NAME }} 1
 
        - name: Show the build
-         run: pip show j${{ vars.BUILD_NAME }}  
+         run: pip show ${{ vars.BUILD_NAME }}  
 
 
 #          ##########
