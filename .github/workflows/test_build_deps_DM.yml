@@ -1,5 +1,5 @@
-name: "Build and Publish metarng package"
-on: [push, workflow_dispatch]
+name: "Test dependancy publish"
+on: [workflow_dispatch,]
 #on:
   #workflow_dispatch:
 
