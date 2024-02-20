@@ -1,5 +1,6 @@
 name: "Build and Publish metarng package"
-on: [push, workflow_dispatch]
+# on: [push, workflow_dispatch]
+on: workflow_dispatch
 #on:
   #workflow_dispatch:
 
