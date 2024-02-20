@@ -37,7 +37,7 @@ jobs:
          run: jf scan "dist/*" --project ${{ vars.JF_PROJECT }}
 
        - name: Upload the packages to the pypi repository in Artifactory
-         run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=1 --module=${{ vars.BUILD_NAME }}
+         run: jf rt u dist/ ${{ vars.JF_PYPI_REPO }} --build-name=${{ vars.BUILD_NAME }} --build-number=1 --project=${{ vars.JF_PROJECT }} --module=${{ vars.BUILD_NAME }}
   
        - name: Upload the collected environment variables from the build \# ${{ github.run_number }}
          run: jf rt bce ${{ vars.BUILD_NAME }} 1
