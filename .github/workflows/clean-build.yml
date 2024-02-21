@@ -19,7 +19,7 @@ jobs:
          run: jf pip-config --global=true --repo-resolve=metar-pypi
            
        - name: Install Deps
-         run: jf pip install .
+         run: jf pip install -r requirements.txt --module=metar
 
        - name: Scan the source code before building
          run: jf audit
