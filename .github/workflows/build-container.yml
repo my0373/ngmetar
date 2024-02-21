@@ -19,7 +19,8 @@ jobs:
          env:
            IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/jfrog-docker-example-image:${{ github.run_number }}
          run: |
-           jf docker build -t $IMAGE_NAME .
+           jf docker build -t $IMAGE_NAME --build-arg BASE_IMAGE=solengmatthewy.jfrog.io/pygoat-docker/python:3 --build-arg PYPI_REPO_VAR=https://pypi.python.org/simple
+
            jf docker push $IMAGE_NAME
            - name: Publish Build info With JFrog CLI
            env:
