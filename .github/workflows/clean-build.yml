@@ -20,9 +20,15 @@ jobs:
            
        - name: Install Deps
          run: jf pip install .
+
+       - name: Scan the source code before building
+         run: jf audit
            
        - name: Package the project
          run: python setup.py sdist bdist_wheel
+      
+       - name: Scan the newly built binaries
+         run: jf scan "dist/*" 
          
        - name: Publish
          run: jf rt upload dist/ metar-pypi/
