@@ -20,6 +20,13 @@ jobs:
            IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/jfrog-docker-example-image:${{ github.run_number }}
          run: |
            jf docker build -t ${{ env.IMAGE_NAME }} --build-arg BASE_IMAGE=python:3 --build-arg PYPI_REPO_VAR=https://pypi.python.org/simple .
+
+       - name: Scan Image
+         env:
+           IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/jfrog-docker-example-image:${{ github.run_number }}
+         run: | 
+           jf docker scan ${{ env.IMAGE_NAME }}
+
        - name: Push Image
          env:
            IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/jfrog-docker-example-image:${{ github.run_number }}
