@@ -1,0 +1,45 @@
+name: "ngmetar-docker"
+on: workflow_dispatch
+
+jobs:
+  build:
+     runs-on: ubuntu-latest
+       
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v3
+         
+       - name: Setup JFrog CLI
+         uses: jfrog/setup-jfrog-cli@v3
+         env:  
+           JF_URL: ${{ secrets.JF_URL }}
+           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+           
+       - name: Build Tag and push Docker Image
+         env:
+           IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/ngmetar-docker:${{ github.run_number }}
+         run: |
+           jf docker build -t ${{ env.IMAGE_NAME }} --build-arg BASE_IMAGE=python:3 --build-arg PYPI_REPO_VAR=https://pypi.python.org/simple .
+
+       - name: Scan Image
+         env:
+           IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/ngmetar-docker:${{ github.run_number }}
+         run: | 
+           jf docker scan ${{ env.IMAGE_NAME }}
+
+       - name: Push Image
+         env:
+           IMAGE_NAME: matthewy.jfrog.io/pygoat-docker/ngmetar-docker:${{ github.run_number }}
+         run: | 
+           jf docker push ${{ env.IMAGE_NAME }}
+       - name: Publish Build info With JFrog CLI
+         env:
+          # Generated and maintained by GitHub
+           JFROG_CLI_BUILD_NAME: ngmetar-docker
+            # JFrog organization secret
+           JFROG_CLI_BUILD_NUMBER : ${{ github.run_number }}
+         run: |
+           jf rt build-collect-env
+           jf rt build-publish
+
+
